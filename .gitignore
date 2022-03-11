@@ -17,4 +17,5 @@
 go.work
 backend/.idea/
 backend/vendor/
+/frontend/nodemodules/
 
