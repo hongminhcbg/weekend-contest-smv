@@ -15,6 +15,6 @@
 
 # Go workspace file
 go.work
-backend/.ideal/
+backend/.idea/
 backend/vendor/
 
