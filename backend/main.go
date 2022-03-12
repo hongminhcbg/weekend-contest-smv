@@ -1,11 +1,19 @@
 package main
 
 import (
+	"context"
+	"encoding/json"
 	"fmt"
-	"github.com/hongminhcbg/weekend-contest-smv/backend/cfg"
-	"github.com/hongminhcbg/weekend-contest-smv/backend/services"
+	"github.com/hongminhcbg/weekend-contest-smv/backend/store"
+	"log"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-redis/redis/v8"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
+
+	"github.com/hongminhcbg/weekend-contest-smv/backend/cfg"
+	"github.com/hongminhcbg/weekend-contest-smv/backend/services"
 )
 
 func CORSMiddleware() gin.HandlerFunc {
@@ -30,6 +38,13 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	b, _ := json.MarshalIndent(conf, "", "\t")
+	fmt.Println("start server with config: ", string(b))
+
+	db := mustConnectMysql(conf)
+	cache := mustConnectRedis(conf)
+	userTrackingStore := store.NewUserVisitedStore(db)
+	service := services.NewUserVisitedService(userTrackingStore, conf, cache)
 
 	r := gin.Default()
 	r.Use(CORSMiddleware())
@@ -39,7 +54,44 @@ func main() {
 		})
 	})
 
-	service := services.NewUserVisitedService(nil, conf)
 	r.POST("/register", service.Register)
 	r.Run()
+}
+
+func mustConnectMysql(c *cfg.Config) *gorm.DB {
+	db, err := gorm.Open(mysql.Open(c.MysqlDsn), &gorm.Config{})
+	if err != nil {
+		panic(err)
+	}
+
+	sqlDB, err := db.DB()
+
+	if err != nil {
+		panic(err)
+	}
+	sqlDB.SetMaxIdleConns(10)
+	sqlDB.SetMaxOpenConns(100)
+
+	// force a connection and test that it worked
+	err = sqlDB.Ping()
+	if err != nil {
+		panic(err)
+	}
+
+	return db
+}
+
+func mustConnectRedis(c *cfg.Config) *redis.Client {
+	opts, err := redis.ParseURL(c.RedisUrl)
+	if err != nil {
+		log.Fatal("parse redis url error", err)
+	}
+
+	cli := redis.NewClient(opts)
+	err = cli.Ping(context.Background()).Err()
+	if err != nil {
+		log.Fatal("ping redis error", err)
+	}
+
+	return cli
 }
