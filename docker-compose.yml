@@ -4,29 +4,35 @@ services:
     depends_on:
       - mysql
       - redis
-    image: weekend-contest-smv-be:v1.0.0
+    image: weekend-contest-smv-be:v0.0.1
     ports:
       - "8080:8080"
     environment:
       - MYSQL_DSN=root:bW90aGVyIGZ1Y2tlciBub29i@tcp(mysql:3306)/user_tracking?charset=utf8mb4&collation=utf8mb4_unicode_ci&parseTime=True&loc=Local
       - REDIS_URL=redis://redis:6379/1
     restart: always
+    networks:
+      - default
   frontend:
     depends_on:
       - backend
       - mysql
       - redis
-    image: weekend-contest-smv-fe:v1.0.0
+    image: weekend-contest-smv-fe:v0.0.4
     ports:
       - "80:80"
     environment:
       - REACT_APP_SERVER_URL=http://backend:8080
     restart: always
+    networks:
+      - default
   mysql:
     image: mysql:5.7
     container_name: mysql-cm
     volumes:
       - db_data:/var/lib/mysql
+    networks:
+      - default
     environment:
       MYSQL_ROOT_PASSWORD: bW90aGVyIGZ1Y2tlciBub29i
       MYSQL_DATABASE: user_tracking
@@ -34,7 +40,13 @@ services:
       MYSQL_PASSWORD: 1
   redis:
     image: redis:6
+    networks:
+      - default
 volumes:
   db_data:
     name: user_tracking
     external: true
+networks:
+  default:
+    external:
+      name: user_tracking

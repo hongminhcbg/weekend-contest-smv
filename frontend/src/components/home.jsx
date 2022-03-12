@@ -52,7 +52,7 @@ const Home = (props) => {
     }
 
     if (hasContext && !registered) {
-        let url = 'http://backend' + '/register';
+        let url = 'http://localhost:8080' + '/register';
         let browser = detect();
         console.log(process.env.REACT_APP_SERVER_URL, browser);
         let body = {

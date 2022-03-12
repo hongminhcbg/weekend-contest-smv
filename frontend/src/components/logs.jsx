@@ -84,7 +84,7 @@ const Logs = () => {
             return
         }
 
-        let url = 'http://backend' + '/visitors?last_id=' + lastId;
+        let url = 'http://localhost:8080' + '/visitors?last_id=' + lastId;
         fetch(url, {
             method: 'GET',
             headers: {
