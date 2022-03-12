@@ -1,15 +1,16 @@
-FROM golang:1.16-alpine
+
+FROM golang:1.14 as builder
 
 WORKDIR /app
 
-COPY go.mod ./
-COPY go.sum ./
+COPY . /app
+
 RUN go mod download
 
-COPY *.go ./
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -tags netgo -ldflags '-w' -o server *.go
 
-RUN go build -o server
-
+FROM scratch
+WORKDIR /opt
+COPY --from=builder /app/server .
 EXPOSE 8080
-
-CMD [ "/app/server"]
+ENTRYPOINT ["/opt/server"]
