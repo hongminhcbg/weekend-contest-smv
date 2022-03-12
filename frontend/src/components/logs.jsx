@@ -84,7 +84,7 @@ const Logs = () => {
             return
         }
 
-        let url = process.env.REACT_APP_SERVER_URL + '/visitors?last_id=' + lastId;
+        let url = 'http://backend' + '/visitors?last_id=' + lastId;
         fetch(url, {
             method: 'GET',
             headers: {

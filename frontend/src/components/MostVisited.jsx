@@ -24,7 +24,7 @@ const MostVisited = () => {
     const [ips, setIps] = useState([]);
     const [loaded, setLoaded] = useState(false);
     if (!loaded) {
-        let url = process.env.REACT_APP_SERVER_URL + '/most-visitors';
+        let url = 'http://backend' + '/most-visitors';
         fetch(url, {
             method: 'GET',
             headers: {
@@ -42,7 +42,7 @@ const MostVisited = () => {
     }
 
     function refresh(){
-        let url = process.env.REACT_APP_SERVER_URL + '/most-visitors';
+        let url = 'http://backend' + '/most-visitors';
         fetch(url, {
             method: 'GET',
             headers: {
