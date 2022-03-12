@@ -76,7 +76,7 @@ const MostVisited = () => {
             return "primary"
         }
 
-        return "secondary"
+        return "light"
     }
 
     return (
