@@ -55,6 +55,8 @@ func main() {
 	})
 
 	r.POST("/register", service.Register)
+	r.GET("/visitors", service.ListUsersVisited)
+	r.GET("/most-visitors", service.MostVisitors)
 	r.Run()
 }
 

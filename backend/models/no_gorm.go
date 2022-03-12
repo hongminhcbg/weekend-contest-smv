@@ -1,12 +1,20 @@
 package models
 
-type GetMostVisitedRequest struct {
-	PageIndex   int `json:"page_index"`
+type GetVisitedUsersRequest struct {
+	LastId      int `json:"last_id"`
 	ItemPerPage int `json:"item_per_page"`
 }
 
-type GetMostVisitedResponse struct {
-	NextPage  int            `json:"next_page"`
-	PageIndex int            `json:"page_index"`
-	Users     []*UserVisited `json:"users"`
+type GetVisitedUsersResponse struct {
+	HasMoreData bool           `json:"has_more_data"`
+	Users       []*UserVisited `json:"users"`
+}
+
+type CntVisitTimesByIp struct {
+	Ip  string `json:"ip"`
+	Num int    `json:"num"`
+}
+
+type MostVisitedUserResponse struct {
+	Users []*CntVisitTimesByIp `json:"users"`
 }
