@@ -1,8 +1,11 @@
 package services
 
 import (
+	"context"
+	"encoding/json"
 	"fmt"
 	"log"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -61,4 +64,54 @@ func (s *UserVisitedService) Register(ctx *gin.Context) {
 	}
 
 	utils.ResponseData(ctx, r)
+}
+
+func (s *UserVisitedService) ListUsersVisited(ctx *gin.Context) {
+	lastId := utils.GetQueryInt(ctx, "last_id", 9e10)
+	itemPerPage := utils.GetQueryInt(ctx, "item_per_page", 10)
+	rCtx := ctx.Request.Context()
+
+	users, err := s.store.GetUsersVisited(rCtx, lastId, itemPerPage)
+	if err != nil {
+		log.Println(err, "ListUsersVisited get in db error")
+		utils.ResponseError(ctx, erp.ERR_INTENAL_SERVER)
+		return
+	}
+
+	result := models.GetVisitedUsersResponse{
+		HasMoreData: !(len(users) < itemPerPage),
+		Users:       users,
+	}
+
+	utils.ResponseData(ctx, result)
+}
+
+func (s *UserVisitedService) MostVisitors(ctx *gin.Context) {
+	countVisitUsers := make([]*models.CntVisitTimesByIp, 0)
+	rCtx := ctx.Request.Context()
+
+	rawResp, err := s.cache.Get(rCtx, erp.MOST_VISITED_USERS).Result()
+	if err == nil {
+		log.Println("[INFOR] MostVisitors response from cache")
+		err = json.NewDecoder(strings.NewReader(rawResp)).Decode(&countVisitUsers)
+		if err == nil {
+			utils.ResponseData(ctx, &models.MostVisitedUserResponse{Users: countVisitUsers})
+			return
+		}
+		return
+	}
+
+	countVisitUsers, err = s.store.GetMostVisitedByIp(rCtx)
+	if err != nil {
+		log.Println(err, "MostVisitors get in db error")
+		utils.ResponseError(ctx, erp.ERR_INTENAL_SERVER)
+		return
+	}
+
+	go func() {
+		b, _ := json.Marshal(countVisitUsers)
+		s.cache.Set(context.Background(), erp.MOST_VISITED_USERS, string(b), 40*time.Second)
+	}()
+
+	utils.ResponseData(ctx, &models.MostVisitedUserResponse{Users: countVisitUsers})
 }

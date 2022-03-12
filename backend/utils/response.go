@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/hongminhcbg/weekend-contest-smv/backend/erp"
 	"net/http"
+	"strconv"
 )
 
 func ResponseError(ctx *gin.Context, err *erp.RuntimeError) {
@@ -24,4 +25,18 @@ func ResponseData(ctx *gin.Context, data interface{}) {
 		},
 		"data": data,
 	})
+}
+
+func GetQueryInt(ctx *gin.Context, q string, defaultVal int) int {
+	qValue, ok := ctx.GetQuery(q)
+	if !ok || len(qValue) == 0 {
+		return defaultVal
+	}
+
+	qValueInt, err := strconv.Atoi(qValue)
+	if err != nil {
+		return defaultVal
+	}
+
+	return  qValueInt
 }

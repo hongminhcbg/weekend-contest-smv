@@ -10,6 +10,7 @@ type UserVisited struct {
 
 	CreatedAt *time.Time `json:"time" gorm:"column:created_at"`
 	UpdatedAt *time.Time `json:"-" gorm:"column:updated_at"`
+	DeletedAt *time.Time `json:"-" gorm:"column:deleted_at"`
 }
 
 func (UserVisited) TableName() string {
