@@ -8,8 +8,8 @@ type UserVisited struct {
 	Browser  string `json:"browser" gorm:"column:browser"`
 	Location string `json:"location" gorm:"column:location"`
 
-	CreatedAt *time.Time `json:"created_at" gorm:"column:created_at"`
-	UpdatedAt *time.Time `json:"updated_at" gorm:"column:updated_at"`
+	CreatedAt *time.Time `json:"-" gorm:"column:created_at"`
+	UpdatedAt *time.Time `json:"-" gorm:"column:updated_at"`
 }
 
 func (UserVisited) TableName() string {
