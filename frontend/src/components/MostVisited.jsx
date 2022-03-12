@@ -24,7 +24,7 @@ const MostVisited = () => {
     const [ips, setIps] = useState([]);
     const [loaded, setLoaded] = useState(false);
     if (!loaded) {
-        let url = 'http://localhost:8080' + '/most-visitors';
+        let url = 'http://127.0.0.1:8080' + '/most-visitors';
         fetch(url, {
             method: 'GET',
             headers: {
@@ -42,7 +42,7 @@ const MostVisited = () => {
     }
 
     function refresh(){
-        let url = 'http://localhost:8080' + '/most-visitors';
+        let url = 'http://127.0.0.1:8080' + '/most-visitors';
         fetch(url, {
             method: 'GET',
             headers: {
