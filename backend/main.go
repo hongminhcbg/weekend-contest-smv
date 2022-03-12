@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"github.com/hongminhcbg/weekend-contest-smv/backend/cfg"
+	"github.com/hongminhcbg/weekend-contest-smv/backend/services"
 
 	"github.com/gin-gonic/gin"
 )
@@ -24,6 +26,11 @@ func CORSMiddleware() gin.HandlerFunc {
 }
 func main() {
 	fmt.Println("Hello world")
+	conf, err := cfg.LoadConfig()
+	if err != nil {
+		panic(err)
+	}
+
 	r := gin.Default()
 	r.Use(CORSMiddleware())
 	r.GET("/ping", func(c *gin.Context) {
@@ -32,5 +39,7 @@ func main() {
 		})
 	})
 
+	service := services.NewUserVisitedService(nil, conf)
+	r.POST("/register", service.Register)
 	r.Run()
 }
