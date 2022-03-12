@@ -1,11 +1,17 @@
-import React from "react";
+import {
+  BrowserRouter as Router, Route
+} from 'react-router-dom';
+import MainNavigate from './ui/MainNavigate';
+import React, {Fragment} from 'react';
 
-import Home from './components/home'
-
-export default function App() {
+function App() {
   return (
-    <div>
-      <Home/>
-    </div>
+      <Router>
+        <Fragment>
+        <MainNavigate/>
+        </Fragment>
+      </Router>
   );
 }
+
+export default App;
