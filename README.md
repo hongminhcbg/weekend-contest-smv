@@ -12,6 +12,6 @@ II. Part B
 III. Part C 
     
     Details In file PDF
-    Summary: 
+    Raw doc: https://docs.google.com/document/d/1IuuOEpl21caBxoU9DZwF8Bg7ns_MQvZN-LodflK0hYc/edit?usp=sharing
 
 ![alt text](https://github.com/hongminhcbg/weekend-contest-smv/blob/main/images/img_1.png?raw=true)
