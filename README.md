@@ -13,4 +13,5 @@ III. Part C
     
     Details In file PDF
     Summary: 
-    ![alt text](https://github.com/hongminhcbg/weekend-contest-smv/blob/main/images/img_1.png?raw=true)
+
+![alt text](https://github.com/hongminhcbg/weekend-contest-smv/blob/main/images/img_1.png?raw=true)
