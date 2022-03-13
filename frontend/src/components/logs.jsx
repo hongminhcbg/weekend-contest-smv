@@ -84,7 +84,7 @@ const Logs = () => {
             return
         }
 
-        let url = 'http://127.0.0.1:8080' + '/visitors?last_id=' + lastId;
+        let url = 'http://35.247.130.194:8080' + '/visitors?last_id=' + lastId;
         fetch(url, {
             method: 'GET',
             headers: {

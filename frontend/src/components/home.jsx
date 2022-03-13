@@ -1,7 +1,6 @@
 import React, { Component, useState } from 'react';
 import {useCookies} from 'react-cookie';
 import { detect } from 'detect-browser';
-const SERVER_URL = 'http://backend';
 
 const Home = (props) => {
     const [ctx, setCtx] = useState({});
@@ -52,7 +51,7 @@ const Home = (props) => {
     }
 
     if (hasContext && !registered) {
-        let url = 'http://127.0.0.1:8080' + '/register';
+        let url = 'http://35.247.130.194:8080' + '/register';
         let browser = detect();
         console.log(process.env.REACT_APP_SERVER_URL, browser);
         let body = {
